@@ -71,7 +71,7 @@ class Matrix(object):
         the current matrix """
         
         if self.getRank() != mat.getRank():
-            raise MatrixError, "Trying to add matrixes of varying rank!"
+            raise MatrixError("Trying to add matrixes of varying rank!")
 
         ret = Matrix(self.m, self.n)
         
@@ -87,7 +87,7 @@ class Matrix(object):
         the current matrix """
         
         if self.getRank() != mat.getRank():
-            raise MatrixError, "Trying to add matrixes of varying rank!"
+            raise MatrixError("Trying to add matrixes of varying rank!")
 
         ret = Matrix(self.m, self.n)
         
@@ -105,7 +105,7 @@ class Matrix(object):
         matm, matn = mat.getRank()
         
         if (self.n != matm):
-            raise MatrixError, "Matrices cannot be multipled!"
+            raise MatrixError("Matrices cannot be multipled!")
         
         mat_t = mat.getTranspose()
         mulmat = Matrix(self.m, matn)
@@ -158,7 +158,7 @@ class Matrix(object):
         n = len(rows[0])
         # Validity check
         if any([len(row) != n for row in rows[1:]]):
-            raise MatrixError, "inconsistent row length"
+            raise MatrixError("inconsistent row length")
         mat = Matrix(m,n, init=False)
         mat.rows = rows
 
@@ -247,10 +247,10 @@ class MatrixTransform(object):
         
         # Works only for column matrices or vectors
         if n != 1:
-            raise MatrixError, 'Not a column matrix!'
+            raise MatrixError('Not a column matrix!')
 
         if len(scales) != m:
-            raise MatrixError, "Scaling co-efficients don't match matrix row size!"
+            raise MatrixError("Scaling co-efficients don't match matrix row size!")
 
         # Make a square matrix of size mxm
         mat = Matrix.makeId(m)
