@@ -222,7 +222,7 @@ class MatrixFactory(object):
     def fromStdin(cls):
         """ Build a matrix from standard input """
         
-        print 'Enter matrix row by row. Type "q" to quit'
+        print('Enter matrix row by row. Type "q" to quit')
         rows = []
         while True:
             line = sys.stdin.readline().strip()
