@@ -15,7 +15,7 @@ def calc_row(r, m1, m2):
     """ Calculate a row 'r' of the multiplication output of matrices m1 and m2 """
 
     d = {}
-    # print 'Calculating for',r
+    print('Calculating for',r)
     for y in range(m2.m):
         d[(r, y)] = sum(item[0]*item[1] for item in zip(m1.rows[r], m2[y]))
 
@@ -25,7 +25,7 @@ def calc_row2(r, m1, m2):
     """ Calculate a row 'r' of the multiplication output of matrices m1 and m2 """
 
     d = []
-    # print 'Calculating for',r
+    print('Calculating for',r)
     for y in range(m2.m):
         d.append(sum(item[0]*item[1] for item in zip(m1.rows[r], m2[y])))
 
@@ -42,7 +42,7 @@ class FastMatrixOps(object):
 
         # Number of columns of m1 == Number of rows of m2
         if (m1.n != matm):
-            raise MatrixError, "Matrices cannot be multipled!"
+            raise MatrixError("Matrices cannot be multipled!")
         
         m2_t = m2.getTranspose()
         mulmat = Matrix(m1.m, m2_n)        
@@ -81,7 +81,7 @@ class FastMatrixOps(object):
 
         # Number of columns of m1 == Number of rows of m2
         if (m1.n != matm):
-            raise MatrixError, "Matrices cannot be multipled!"
+            raise MatrixError("Matrices cannot be multipled!")
         
         m2_t = m2.getTranspose()
 
@@ -116,18 +116,18 @@ if __name__ == "__main__":
     # Make second random matrix of rank (10, 10)    
     m2 = MatrixFactory.makeRandom(10, 10)   
 
-    print 'Calculating m1*m2 directly...'
+    print('Calculating m1*m2 directly...')
     m3 = m1*m2
     
     fops = FastMatrixOps()
-    print 'Calculating m1*m2 concurrently using dictionaries...'   
+    print('Calculating m1*m2 concurrently using dictionaries...')
     m3_n = fops.multiply(m1, m2)
-    print 'Asserting both are equal...'
-    print m3 == m3_n
+    print('Asserting both are equal...')
+    print(m3 == m3_n)
     assert(m3 == m3_n)
 
-    print 'Calculating m1*m2 concurrently using direct data...'   
+    print('Calculating m1*m2 concurrently using direct data...')
     m3_n = fops.multiply2(m1, m2)
-    print 'Asserting both are equal...'
-    print m3 == m3_n
+    print('Asserting both are equal...')
+    print(m3 == m3_n)
     assert(m3 == m3_n)  
