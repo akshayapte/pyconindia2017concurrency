@@ -1,6 +1,6 @@
 """ Simple web crawler using concurrent futures """
 
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import requests
 import sys
 import urllib
@@ -25,7 +25,7 @@ def get_domain(url):
 class Crawler(object):
     """ A dead simple recursive single-domain web-crawler using concurrent futures """
 
-    def __init__(self, url, directory=False, concurrency=5):
+    def __init__(self, url, directory=False, concurrency=5, threads=False):
         # Crawl as a directory (dont crawl entire domain)
         self.directory = directory
         # Concurrency in terms of number of workers
@@ -40,6 +40,8 @@ class Crawler(object):
         self.count = 0
         # Map of saved data
         self.data_map = {}
+        # Use threads ?
+        self.threads = threads
 
     def fetch_url(self, url):
 
@@ -88,8 +90,13 @@ class Crawler(object):
         
     def crawl(self):
         """ Crawl a site recursively """
-        
-        with ProcessPoolExecutor(max_workers=self.concurrency) as executor:
+
+        if self.threads:
+            executor = ThreadPoolExecutor(max_workers = self.concurrency)
+        else:
+            executor = ProcessPoolExecutor(max_workers = self.concurrency)
+
+        with executor:
             urls = [self.url]
             url_dict = {}
             url_dict[self.url] = 1
@@ -127,11 +134,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A simple web crawler using concurrent futures')
     parser.add_argument('url',help='URL to crawl')
     parser.add_argument('-d','--directory',help='Crawl as directory', action='store_true')
+    parser.add_argument('-t','--threads',help='Use threads instead of processes', action='store_true')  
     parser.add_argument('-c','--concurrency',help='Concurrency in terms of # of workers', type=int, default=5)
 
     args = parser.parse_args()
     
     print('Crawling',args.url,'with directory option=',args.directory,'...')
-    crawler = Crawler(args.url, directory=args.directory, concurrency=args.concurrency)
+    crawler = Crawler(args.url, directory=args.directory, concurrency=args.concurrency, threads=args.threads)
     crawler.crawl()
     
