@@ -131,7 +131,7 @@ class MazeSolver(object):
         # you get to a point which provides an
         # alternative.
         
-        print 'Backtracking...'
+        print('Backtracking...')
         path = self._path[:]
         path.reverse()
 
@@ -180,13 +180,13 @@ class MazeSolver(object):
         # If lastupdate count reaches the total number of points
         # it could mean we exhausted all possible paths.
         if self._lastupdate > self.maze.getWidth()*self.maze.getHeight():
-            print 'Exited because of retracekeycache overflow'
+            print('Exited because of retracekeycache overflow')
             return True
 
         # If retrace has gone through all zero points and not
         # yet found a solution, then we are hitting a dead-lock.
         elif len(self._retracemap.keys())> self._numzeropts - 1:
-            print 'Exited because number of points exceeded zero points'            
+            print('Exited because number of points exceeded zero points')
             return True
         else:
             # If the retrace path contains only one point
@@ -195,7 +195,7 @@ class MazeSolver(object):
                 # If we hit the same point more than the number of
                 # zero points in the maze, it signals a dead-lock.
                 if val>self._numzeropts:
-                    print 'Exited because we are oscillating'                    
+                    print('Exited because we are oscillating')
                     return True
         
         return False
@@ -204,9 +204,8 @@ class MazeSolver(object):
         """ See if this point is causing a closed loop """
 
         l = range(0, len(self._path)-1, 2)
-        l.reverse()
-        
-        for x in l:
+
+        for x in reversed(l):
             if self._path[x] == point:
                 self._loops += 1
                 # loop = tuple(self._path[x:])
@@ -311,7 +310,7 @@ class MazeSolver(object):
     def getAlternatePoint(self, points, point):
         """ Get alternate point """
 
-        print 'Trying alternate...',self._current, point, points
+        print('Trying alternate...',self._current, point, points)
         points2 = points[:]
 
         if point in points2:
@@ -346,22 +345,22 @@ class MazeSolver(object):
     def solve(self):
         """ Solve the maze """
 
-        print 'Starting point is', self._start
-        print 'Ending point is', self._end        
+        print('Starting point is', self._start)
+        print('Ending point is', self._end)
         
         # First check if both start and end are same
         if self._start == self._end:
-            print 'Start/end points are the same. Trivial maze.'
+            print('Start/end points are the same. Trivial maze.')
             print [self._start, self._end]
             return None
         
         # Check boundary conditions
         if not self.boundaryCheck():
-            print 'Either start/end point are unreachable. Maze cannot be solved.'
+            print('Either start/end point are unreachable. Maze cannot be solved.')
             return None
 
         # Proper maze
-        print 'Maze is a proper maze.'
+        print('Maze is a proper maze.')
 
         # Initialize solver
         self.setCurrentPoint(self._start)
@@ -369,7 +368,7 @@ class MazeSolver(object):
         
         self.unsolvable = False
 
-        print 'Solving...'
+        print('Solving...')
 
         while not self.isSolved():
             pt = self.getNextPoint()
@@ -377,16 +376,16 @@ class MazeSolver(object):
             if pt:
                 self.setCurrentPoint(pt)
             else:
-                print 'Dead-lock - maze unsolvable'
+                print('Dead-lock - maze unsolvable')
                 self.unsolvable = True
                 break
 
         if not self.unsolvable:
-            print 'Final solution path is',self._path
-            print 'Length of path is',len(self._path)
+            print('Final solution path is',self._path)
+            print('Length of path is',len(self._path))
         else:
-            print 'Path till deadlock is',self._path
-            print 'Length of path is',len(self._path)            
+            print('Path till deadlock is',self._path)
+            print('Length of path is',len(self._path))
 
         self.printResult()
 
@@ -404,10 +403,10 @@ class MazeSolver(object):
         self.maze.setItem(self._end[0], self._end[1], 'F')        
 
         if self.unsolvable:
-            print 'Maze with final path'
+            print('Maze with final path')
         else:
-            print 'Maze with solution path'
+            print('Maze with solution path')
             
-        print self.maze
+        print(self.maze)
 
         

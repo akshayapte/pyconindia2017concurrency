@@ -25,9 +25,9 @@ class MazeReader(object):
     def readStdin(self):
         """ Read a maze from standard input """
 
-        print 'Enter a maze'
-        print 'You can enter a maze row by row'
-        print
+        print('Enter a maze')
+        print('You can enter a maze row by row')
+        print()
         
         data = raw_input('Enter the dimension of the maze as Width X Height: ')
         w, h = data.split()
@@ -39,7 +39,7 @@ class MazeReader(object):
                 row = raw_input('Enter row number %d: ' % (x+1))
             row = row.split()
             if len(row) != w:
-                raise MazeReaderException,'invalid size of maze row'
+                raise MazeReaderException('invalid size of maze row')
             self.maze_rows.append(row)
 
     def readFile(self):

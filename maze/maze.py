@@ -70,7 +70,7 @@ class Maze(object):
         width = len(self._rows[0])
         widths = [len(row) for row in self._rows]
         if widths.count(width) != len(widths):
-            raise MazeError, 'Invalid maze!'
+            raise MazeError('Invalid maze!')
 
         self._height = len(self._rows)
         self._width = width
@@ -81,7 +81,7 @@ class Maze(object):
         # This converts any number > 0 in the maze to 1
         for x in range(len(self._rows)):
             row = self._rows[x]
-            row = map(lambda x: min(int(x), 1), row) 
+            row = list(map(lambda x: min(int(x), 1), row))
             self._rows[x] = row
 
     def getHeight(self):
@@ -103,10 +103,10 @@ class Maze(object):
         
         # Don't support Pythonic negative indices
         if x > w - 1 or x<0:
-            raise MazeError, 'x co-ordinate out of range!'
+            raise MazeError('x co-ordinate out of range!')
 
         if y > h - 1 or y<0:
-            raise MazeError, 'y co-ordinate out of range!'        
+            raise MazeError('y co-ordinate out of range!')
 
         pass
     

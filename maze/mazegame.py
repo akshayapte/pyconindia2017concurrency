@@ -25,7 +25,7 @@ class MazeGame(object):
         if not maze:
             return None
         
-        print maze
+        print(maze)
         self.getStartEndPoints(maze)
         
         # Dump it to maze.txt
@@ -81,8 +81,8 @@ class FilebasedMazeGame(MazeGame):
             l = line.split(')')
             self._start = eval(l[0].strip() + ')')
             self._end = eval(l[1].strip() + ')')
-        except (OSError, IOError, Exception), e:
-            print e
+        except (OSError, IOError, Exception) as e:
+            print(e)
             sys.exit(0)
         
 class RandomMazeGame(MazeGame):
