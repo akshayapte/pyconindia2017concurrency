@@ -43,14 +43,19 @@ class Maze(object):
         for row in self._rows:
             for item in row:
                 if item == 0:
-                    line = ''.join((' ', G + '—' + W,' '))
+                    line = ''.join((G + ' ' + W, G + ' ' + W, G + ' ' + W))
                 elif item == 1:
-                    line = ''.join((' ', R + '|' + W,' '))
+                    line = ''.join((R + ' ' + W, R + ' ' + W, R + ' ' + W))
+                elif item == '*':
+                    line = ''.join((O + ' ' + W, O + '*' + W, O + ' ' + W))
+                elif item == '+':
+                    line = ''.join((B + ' ' + W, B + '+' + W, B + ' ' + W))
                 else:
-                    line = ''.join((' ',str(item),' '))
+                    line = ''.join((B + ' ' + W, B + str(item) + W, B + ' ' + W))
+                    
                 s = ''.join((s, line))
                 
-            s = ''.join((s,'\n\n'))
+            s = ''.join((s,'\n'))
             # s += '-'*len(s) + '\n'
 
         return s

@@ -396,9 +396,9 @@ class MazeSolver(object):
         
         for x,y in self._path:
             if self.unsolvable:
-                self.maze.setItem(x,y, O + '*' + W)
+                self.maze.setItem(x,y, '*')
             else:
-                self.maze.setItem(x,y, B + '+' + W)               
+                self.maze.setItem(x,y, '+')
 
         self.maze.setItem(self._start[0], self._start[1], 'S')
         self.maze.setItem(self._end[0], self._end[1], 'F')        
