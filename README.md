@@ -1,7 +1,7 @@
 ## Concurency workshop in PyCon India 2017, New Delhi, Nov 2 2017
 
 <img src="static/maze_game.png" />
-g
+
 This is a workshop on concurrency in Python 3.0. We will talk about the Python **multiprocessing** module and **concurrent futures** and look at around 3-4 interesting examples of getting the best out of Python by writing concurrent code using these techniques for solving data parallel problems.
 
 The examples we will be looking at here would be,
