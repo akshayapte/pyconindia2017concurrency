@@ -5,13 +5,16 @@ Maze solver using Backtracking
 """
 
 import random
-from colors import *
+import copy
+import os
 
+from colors import *
+from multiprocessing import Process
 
 class MazeSolver(object):
     """ Maze solver class """
     
-    def __init__(self, maze):
+    def __init__(self, maze, silent=False):
         self.maze = maze
         self._start = (0,0)
         self._end = (0,0)
@@ -42,7 +45,13 @@ class MazeSolver(object):
         # Number of times retracemap is not updated
         # with a new point
         self._lastupdate = 0
-        
+        # Abort flag
+        self.abort = False
+        # Shared state
+        self.state = None
+        # Silent ?
+        self.silent = silent
+
     def setStartPoint(self, pt):
 
         self.maze.validatePoint(pt)
@@ -79,6 +88,11 @@ class MazeSolver(object):
 
         return (self._current == self._end)
 
+    def isFinished(self):
+        """ Whether maze is solved or deadlocked """
+
+        return self.isSolved() or self.unsolvable
+    
     def checkDeadLock(self, point1, point2):
 
         pt1 = self.getClosestPoint(self.getExitPoints(point1))
@@ -191,7 +205,7 @@ class MazeSolver(object):
         else:
             # If the retrace path contains only one point
             if len(self._retracemap.keys())==1:
-                val = self._retracemap.get(self._retracemap.keys()[0])
+                val = self._retracemap.get(list(self._retracemap.keys())[0])
                 # If we hit the same point more than the number of
                 # zero points in the maze, it signals a dead-lock.
                 if val>self._numzeropts:
@@ -231,7 +245,12 @@ class MazeSolver(object):
                 point = point2
         else:
             allcycles=[]
-            map(allcycles.extend, [item[0] for item in self.cycles])
+            # map(allcycles.extend, [item[0] for item in self.cycles])
+            [allcycles.extend(x) for x in [item[0] for item in self.cycles]]
+            
+            #for item in self.cycles:
+            #    allcycles.append(item[0])
+            
             if self._current==self._start or self._current in allcycles:
                 # print 'FOUND IT =>',self._current
                 history = []
@@ -342,8 +361,8 @@ class MazeSolver(object):
             
         return point2
 
-    def solve(self):
-        """ Solve the maze """
+    def preSolve(self):
+        """ Steps before solving """
 
         print('Starting point is', self._start)
         print('Ending point is', self._end)
@@ -352,12 +371,12 @@ class MazeSolver(object):
         if self._start == self._end:
             print('Start/end points are the same. Trivial maze.')
             print [self._start, self._end]
-            return None
+            return False
         
         # Check boundary conditions
         if not self.boundaryCheck():
             print('Either start/end point are unreachable. Maze cannot be solved.')
-            return None
+            return False
 
         # Proper maze
         print('Maze is a proper maze.')
@@ -368,9 +387,36 @@ class MazeSolver(object):
         
         self.unsolvable = False
 
-        print('Solving...')
+        return True
+    
+    def postSolve(self):
+        """ Steps after solving """
 
-        while not self.isSolved():
+        if self.state != None:
+            print('Solver %s' % os.getpid(), 'solved the maze. Printing result ...')
+                
+        self.printResult()
+        if not self.unsolvable:
+            print('Final solution path is',self._path)
+            print('Length of path is',len(self._path))
+        else:
+            print('Path till deadlock is',self._path)
+            print('Length of path is',len(self._path))      
+
+    def length(self):
+        """ Return length of the solution path """
+
+        return len(self._path)
+        
+    def doSolve(self):
+        """ Actual solution step """
+
+        while not (self.isSolved() or self.abort):
+            if self.state != None and self.state.value == 1:
+                print('Solver %s' % os.getpid(), '=> Maze got solved already')
+                self.abort = True
+                break
+            
             pt = self.getNextPoint()
             
             if pt:
@@ -380,18 +426,37 @@ class MazeSolver(object):
                 self.unsolvable = True
                 break
 
-        if not self.unsolvable:
-            print('Final solution path is',self._path)
-            print('Length of path is',len(self._path))
-        else:
-            print('Path till deadlock is',self._path)
-            print('Length of path is',len(self._path))
+        if not self.abort:
+            if self.state != None:
+                self.state.value = 1
+            
+    def solve(self, state=None):
+        """ Solve the maze """
 
-        self.printResult()
+        if not self.preSolve():
+            return
+
+        self.state = state
+        if self.state != None:
+            print('Solver %s' % os.getpid(), 'starting...')
+        else:
+            print('Solving...')
+            
+        self.doSolve()
+
+        if self.abort:
+            return
+        
+        self.postSolve()
+
+        return {'path': self._path, 'solved': not self.unsolvable, 'id': os.getpid()}
 
     def printResult(self):
-        """ Print the maze showing the path """
-
+        """ Print the maze
+		 showing the path """
+        
+        if self.silent:
+            return False
         
         for x,y in self._path:
             if self.unsolvable:

@@ -29,14 +29,14 @@ class MazeReader(object):
         print('You can enter a maze row by row')
         print()
         
-        data = raw_input('Enter the dimension of the maze as Width X Height: ')
+        data = input('Enter the dimension of the maze as Width X Height: ')
         w, h = data.split()
         w, h  = int(w), int(h)
         
         for x in range(h):
             row = ''
             while not row:
-                row = raw_input('Enter row number %d: ' % (x+1))
+                row = input('Enter row number %d: ' % (x+1))
             row = row.split()
             if len(row) != w:
                 raise MazeReaderException('invalid size of maze row')
@@ -45,7 +45,7 @@ class MazeReader(object):
     def readFile(self):
         """ Read a maze from an input file """
 
-        fname = raw_input('Enter maze filename: ')
+        fname = input('Enter maze filename: ')
         self.maze_rows = json.load(open(fname))
 
     def getData(self):

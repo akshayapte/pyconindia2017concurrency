@@ -6,6 +6,14 @@ Different types of Maze game classes
 
 from mazefactory import MazeFactory, MazeReader
 from solver import MazeSolver
+from maze import Maze
+import copy
+import multiprocessing
+
+# input = input
+
+def solve(solver):
+    return solver.solve()
 
 class MazeGame(object):
 
@@ -18,8 +26,8 @@ class MazeGame(object):
 
     def getStartEndPoints(self, maze):
         return None
-    
-    def runGame(self):
+
+    def runGame(self, concurrent=False, best=False):
 
         maze = self.createMaze()
         if not maze:
@@ -31,13 +39,68 @@ class MazeGame(object):
         # Dump it to maze.txt
         # open('maze.txt','w').write(str(maze))
         maze.save()
-        
-        solver = MazeSolver(maze)
-
         open ('maze_pts.txt','w').write(str(self._start) + ' ' + str(self._end) + '\n')
-        solver.setStartPoint(self._start)
-        solver.setEndPoint(self._end)
-        solver.solve()
+
+        if concurrent:
+            procs, solvers = [], []
+            if not best:
+                # Pick the solver which finishes first
+                state = multiprocessing.Value('i', 0)
+            
+                for i in range(multiprocessing.cpu_count()):
+                    solver = MazeSolver(Maze(rows=maze._rows[:]), silent=False)
+                    solver.setStartPoint(self._start)
+                    solver.setEndPoint(self._end)
+                    solvers.append(solver)
+                
+                    proc = multiprocessing.Process(target=solver.solve, args=(state,))
+                    procs.append(proc)
+
+                for proc in procs:
+                    proc.start()
+                
+                for proc in procs:
+                    proc.join()
+                
+            else:
+                # Pick the best solver
+                pool = multiprocessing.Pool(multiprocessing.cpu_count())
+
+                for i in range(multiprocessing.cpu_count()):
+                    solver = MazeSolver(Maze(rows=maze._rows[:]), silent=True)
+                    solver.setStartPoint(self._start)
+                    solver.setEndPoint(self._end)
+                    solvers.append(solver)
+
+                results = pool.map(solve, solvers)
+                # Pick the one which solved it
+                solved_results = list(filter(lambda x: x['solved'], results))
+                # Manufacture a solver - for printing results
+                solvor = MazeSolver(maze)
+                solvor.setStartPoint(self._start)
+                solvor.setEndPoint(self._end)
+                    
+                if len(solved_results):
+                    pick = sorted(solved_results, key=lambda x: len(x['path']))[0]
+                    solvor._path = pick['path']
+                    # Pick one with least length
+                    print('Got',len(solved_results),'solutions with path lengths =>',list(map(lambda x: len(x['path']), solved_results)))
+                    print('Process',pick['id'],'had the best solution at path length',len(pick['path']))
+                else:
+                    pick = sorted(results, key=lambda x: len(x['path']))[0]
+                    solvor._path = pick['path']
+                    solvor.unsolvable = True
+                                        
+                    print('No solved results.')
+                    print('Process',pick['id'],'had the smallest solution at path length',len(pick['path']))
+
+                solvor.printResult()
+                
+        else:
+            solver = MazeSolver(maze)
+            solver.setStartPoint(self._start)
+            solver.setEndPoint(self._end)
+            solver.solve()
 
 class InteractiveMazeGame(MazeGame):
 
@@ -49,7 +112,7 @@ class InteractiveMazeGame(MazeGame):
 
         while True:
             try:
-                pt1 = raw_input('Enter starting point: ')
+                pt1 = input('Enter starting point: ')
                 x,y = pt1.split()
                 self._start = (int(x), int(y))
                 maze.validatePoint(self._start)
@@ -59,7 +122,7 @@ class InteractiveMazeGame(MazeGame):
 
         while True:
             try:
-                pt2 = raw_input('Enter ending point: ')
+                pt2 = input('Enter ending point: ')
                 x,y = pt2.split()
                 self._end = (int(x), int(y))        
                 maze.validatePoint(self._end)
@@ -75,7 +138,7 @@ class FilebasedMazeGame(MazeGame):
 
     def getStartEndPoints(self, maze):
 
-        filename = raw_input('Enter points file: ').strip()
+        filename = input('Enter points file: ').strip()
         try:
             line = open(filename).readlines()[0].strip()
             l = line.split(')')
