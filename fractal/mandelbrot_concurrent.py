@@ -4,7 +4,7 @@ import argparse
 
 from PIL import Image
 from concurrent.futures import ProcessPoolExecutor, as_completed
-
+import multiprocessing
 
 def mandelbrotCalcRow(y, w, h, max_iteration = 1000):
     """ Calculate one row of the mandelbrot set with size wxh """
@@ -35,7 +35,7 @@ def mandelbrotCalcSet(w, h, max_iteration=10000, output='mandelbrot_mp.png'):
     
     mandelbrot_callable = functools.partial(mandelbrotCalcRow, w=w, h=h, max_iteration=max_iteration)
 
-    with ProcessPoolExecutor(max_workers=10) as executor:
+    with ProcessPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
         future_map = (executor.submit(mandelbrot_callable, y) for y in range(h))
         for future in as_completed(future_map):
             image_rows = future.result()
