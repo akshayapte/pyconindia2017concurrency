@@ -5,7 +5,7 @@ import sys
 from PIL import Image
 import functools
 import argparse
-from multiprocessing import Manager, Pool
+import multiprocessing
 
 def mandelbrot_calc_row(y, w, h, max_iteration = 1000):
     """ Calculate one row of the mandelbrot set with size wxh """
@@ -34,7 +34,7 @@ def mandelbrot_calc_set(w, h, max_iteration=10000, output='mandelbrot_mp.png'):
     image = Image.new("RGB", (w, h))
 
     image_rows = {}
-    pool = Pool(4)
+    pool = multiprocessing.Pool(multiprocessing.cpu_count())
     mandelbrot_partial = functools.partial(mandelbrot_calc_row, w=w, h=h, 
                                            max_iteration=max_iteration)
     for image_row in pool.map(mandelbrot_partial, range(h)):
