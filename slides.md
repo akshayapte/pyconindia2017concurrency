@@ -1,5 +1,5 @@
 
-__Concurrency in Python 3.0 - Oh my!__
+# Concurrency in Python 3.0
 
 __Anand B Pillai__ <br/>
 _anandpillail@letterboxes.org_ <br/>
@@ -8,58 +8,46 @@ _@skeptichacker_ <br/>
 
 ---
 
-__Concurrency__
+## Concurrency
+
+* Most basic form of multi-tasking
+* Perform more than one task during a given time duration
+* Works by allocating time slices to tasks 
+* Real Life Example(s) - A drummer playing on drums, Lead Singer/Guitarist in a Band.
+
+---
+
+## Parallelism
 
 * Perform more than one task at a given time
-* Tasks may be running truly in parallel or not.
-* Example - A runner running and jumping over hurdles.
+* Possible with multi-core CPUs
+* Your phone can perform tasks in parallel, so can your laptop.
+* Real Life Example(s) - A Printer/Xerox/Scanner machine, A modern web-browser.
 
 ---
-
-__Parallelism__
-
-* Perform more than one task - truly parallel
-* Truly possible with multiple core CPUs.
-* Example - A footballer running and moving the ball with him.
-
-* Data Parallel - Most common, split a series of data to multiple tasks doing same thing and combine results.
-* Compute Parallel - Perform multiple tasks on the same data set in parallel (Pipelines)
-
----
-
-__Analogies__
-
-__Painting your house__
-
-* Paint with 1 painter - Serial (no concurrency)
-* Paint with 1 painter painting one room in morning and another in afternoon - concurrent
-* Paint with 2 painters paiting 2 rooms in parallel - truly parallel
-
----
-__Types of Multitasking__
+## Types of Multitasking
 
 * Pre-emptive: CPU manages threads priority via scheduler. Threads just run.
 * Co-operative: No central mangement. Threads yield to others when they're done.
-
-* Your laptop does the former.
+* Your laptop does the former. Almost all modern computing devices does this.
 * Olden days with a single mainframe timeshare computers - People used to do latter!
 
 ---
 
-__Python & Concurrency__
+## Python & Concurrency
 
 * Threading
 * Multiprocessing
 * Concurrent futures
 * Async processing
 * Libraries
-* Oh my!...
+...
 
 Wait.
 
 ---
 
-__Threads__
+## Threads
 
 * The GIL Monster
 * Doesn't allow compute threads (bytecode heavy) to truly run in parallel.
@@ -67,7 +55,8 @@ __Threads__
 * I/O bound threads and some libraries (numpy etc) dont have a problem.
 
 ---
-__Processes__
+
+## Processes
 
 * Gets around GIL
 * But avoid sharing state
@@ -76,17 +65,18 @@ __Processes__
 * Funky data types for shared memory - not very useful to write complex programs.
 
 ---
-__Concurrent Futures__
+
+## Concurrent Futures
 
 * Multiple processes returning results in future
 * Good programming paradigm for data parallel computations
 * Provides same interface for threading & processes
 
 ---
-__Asyncio__
+
+## Asyncio
 
 * New library in Python3
-* Exotic
 * Asynchronous processing via co-operative multitasking
 * Single thread
 * Use exotic *async* and *await* keywords
@@ -94,19 +84,32 @@ __Asyncio__
 * Slightly high learning curve.
 
 ---
-__Async Libraries__
 
-* Twisted - Reactor pattern, uses deferreds with callback chains.
-** Deferreds are like futures.
-* Gevent & Eventlet - Asynchronous processing libraries.
-** Slightly old story now a days, still interesting to give a try.
-** Uses greenlets - microthreads which use a kind of cooperative multitasking.
+## Compute Parallel Problems
 
----
+* Perform multiple tasks on the same data set in parallel (Pipelines)
+* Example - Multimedia processing. Processing a set of videos to reduce their size (encoding), plus extracting meta-data (for indexing).
+* Example - Machine Learning on massive data sets. Same dataset is worked upon multiple ML algorithms in parallel.
 
-__Examples__
+We won't be focussing on compute parallel problems.
 
 ---
 
-    >>> import antigravity
-	
+## Data Parallel Problems
+
+* Set of problems where each element of the input data can be processed independently of others
+* Ideal for parallel processing because each core can work on different data elements in parallel.
+* Final output is often a combination of the individual processed output.
+* Example Problems
+    * __Matrix Multiplication__ - Each row of the matrix can be processed in parallel and combined to generate final matrix.
+    * __Fractal Image Generation__ - Each row of the image can be generated parallely to generate final image.
+    * __Puzzle Solvers__ - Multiple solvers can be run in parallel to generate single solution or a batch of solutions. E.g: Sudoku Solver, Maze Solver etc.
+    * __I/O Tasks__ - Almost all tasks involing input/output on file system or network can be run in parallel. E.g: Web Crawler,
+
+---
+
+LET'S GO!
+
+
+
+    

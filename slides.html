@@ -25,7 +25,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>None</title>
+    <title>Concurrency in Python 3.0</title>
     <!-- Styles -->
     
     <style type="text/css" media="print">
@@ -697,6 +697,77 @@ aside {
     </style>
     
     
+      
+      <style type="text/css" media="screen, projection">
+        .highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+      </style>
+      
+    
     <!-- /Styles -->
     <!-- Javascripts -->
     
@@ -1301,9 +1372,10 @@ aside {
         <div class="slide slide-1">
           <div class="inner">
             
+            <header><h1>Concurrency in Python 3.0</h1></header>
             
-            <section><p><strong>Concurrency in Python 3.0 - Oh my!</strong></p>
-<p><strong>Anand B Pillai</strong> <br/>
+            
+            <section><p><strong>Anand B Pillai</strong> <br/>
 <em>anandpillail@letterboxes.org</em> <br/>
 <em>@skeptichacker</em> <br/></p></section>
             
@@ -1321,7 +1393,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              1/13
+              1/12
             </aside>
           </footer>
         </div>
@@ -1332,12 +1404,14 @@ aside {
         <div class="slide slide-2">
           <div class="inner">
             
+            <header><h2>Concurrency</h2></header>
             
-            <section><p><strong>Concurrency</strong></p>
-<ul>
-<li>Perform more than one task at a given time</li>
-<li>Tasks may be running truly in parallel or not.</li>
-<li>Example - A runner running and jumping over hurdles.</li>
+            
+            <section><ul>
+<li>Most basic form of multi-tasking</li>
+<li>Perform more than one task during a given time duration</li>
+<li>Works by allocating time slices to tasks </li>
+<li>Real Life Example(s) - A drummer playing on drums, Lead Singer/Guitarist in a Band.</li>
 </ul></section>
             
           </div>
@@ -1354,7 +1428,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              2/13
+              2/12
             </aside>
           </footer>
         </div>
@@ -1365,18 +1439,14 @@ aside {
         <div class="slide slide-3">
           <div class="inner">
             
+            <header><h2>Parallelism</h2></header>
             
-            <section><p><strong>Parallelism</strong></p>
-<ul>
-<li>Perform more than one task - truly parallel</li>
-<li>Truly possible with multiple core CPUs.</li>
-<li>
-<p>Example - A footballer running and moving the ball with him.</p>
-</li>
-<li>
-<p>Data Parallel - Most common, split a series of data to multiple tasks doing same thing and combine results.</p>
-</li>
-<li>Compute Parallel - Perform multiple tasks on the same data set in parallel (Pipelines)</li>
+            
+            <section><ul>
+<li>Perform more than one task at a given time</li>
+<li>Possible with multi-core CPUs</li>
+<li>Your phone can perform tasks in parallel, so can your laptop.</li>
+<li>Real Life Example(s) - A Printer/Xerox/Scanner machine, A modern web-browser.</li>
 </ul></section>
             
           </div>
@@ -1393,7 +1463,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              3/13
+              3/12
             </aside>
           </footer>
         </div>
@@ -1404,50 +1474,13 @@ aside {
         <div class="slide slide-4">
           <div class="inner">
             
-            
-            <section><p><strong>Analogies</strong></p>
-<p><strong>Painting your house</strong></p>
-<ul>
-<li>Paint with 1 painter - Serial (no concurrency)</li>
-<li>Paint with 1 painter painting one room in morning and another in afternoon - concurrent</li>
-<li>Paint with 2 painters paiting 2 rooms in parallel - truly parallel</li>
-</ul></section>
-            
-          </div>
-          <div class="presenter_notes">
-            <header><h1>Presenter Notes</h1></header>
-            <section>
-            
-            </section>
-          </div>
-          <footer>
-            
-            <aside class="source">
-              Source: <a href="slides.md">slides.md</a>
-            </aside>
-            
-            <aside class="page_number">
-              4/13
-            </aside>
-          </footer>
-        </div>
-      </div>
-      
-      <!-- slide source: slides.md -->
-      <div class="slide-wrapper">
-        <div class="slide slide-5">
-          <div class="inner">
+            <header><h2>Types of Multitasking</h2></header>
             
             
-            <section><p><strong>Types of Multitasking</strong></p>
-<ul>
+            <section><ul>
 <li>Pre-emptive: CPU manages threads priority via scheduler. Threads just run.</li>
-<li>
-<p>Co-operative: No central mangement. Threads yield to others when they're done.</p>
-</li>
-<li>
-<p>Your laptop does the former.</p>
-</li>
+<li>Co-operative: No central mangement. Threads yield to others when they're done.</li>
+<li>Your laptop does the former. Almost all modern computing devices does this.</li>
 <li>Olden days with a single mainframe timeshare computers - People used to do latter!</li>
 </ul></section>
             
@@ -1465,7 +1498,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              5/13
+              4/12
             </aside>
           </footer>
         </div>
@@ -1473,18 +1506,19 @@ aside {
       
       <!-- slide source: slides.md -->
       <div class="slide-wrapper">
-        <div class="slide slide-6">
+        <div class="slide slide-5">
           <div class="inner">
             
+            <header><h2>Python &amp; Concurrency</h2></header>
             
-            <section><p><strong>Python &amp; Concurrency</strong></p>
-<ul>
+            
+            <section><ul>
 <li>Threading</li>
 <li>Multiprocessing</li>
 <li>Concurrent futures</li>
 <li>Async processing</li>
-<li>Libraries</li>
-<li>Oh my!...</li>
+<li>Libraries
+...</li>
 </ul>
 <p>Wait.</p></section>
             
@@ -1502,7 +1536,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              6/13
+              5/12
             </aside>
           </footer>
         </div>
@@ -1510,12 +1544,13 @@ aside {
       
       <!-- slide source: slides.md -->
       <div class="slide-wrapper">
-        <div class="slide slide-7">
+        <div class="slide slide-6">
           <div class="inner">
             
+            <header><h2>Threads</h2></header>
             
-            <section><p><strong>Threads</strong></p>
-<ul>
+            
+            <section><ul>
 <li>The GIL Monster</li>
 <li>Doesn't allow compute threads (bytecode heavy) to truly run in parallel.</li>
 <li>Causes thread thrashing and priority inversion</li>
@@ -1536,7 +1571,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              7/13
+              6/12
             </aside>
           </footer>
         </div>
@@ -1544,12 +1579,13 @@ aside {
       
       <!-- slide source: slides.md -->
       <div class="slide-wrapper">
-        <div class="slide slide-8">
+        <div class="slide slide-7">
           <div class="inner">
             
+            <header><h2>Processes</h2></header>
             
-            <section><p><strong>Processes</strong></p>
-<ul>
+            
+            <section><ul>
 <li>Gets around GIL</li>
 <li>But avoid sharing state</li>
 <li>Use return values as much as possible.</li>
@@ -1571,7 +1607,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              8/13
+              7/12
             </aside>
           </footer>
         </div>
@@ -1579,12 +1615,13 @@ aside {
       
       <!-- slide source: slides.md -->
       <div class="slide-wrapper">
-        <div class="slide slide-9">
+        <div class="slide slide-8">
           <div class="inner">
             
+            <header><h2>Concurrent Futures</h2></header>
             
-            <section><p><strong>Concurrent Futures</strong></p>
-<ul>
+            
+            <section><ul>
 <li>Multiple processes returning results in future</li>
 <li>Good programming paradigm for data parallel computations</li>
 <li>Provides same interface for threading &amp; processes</li>
@@ -1604,7 +1641,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              9/13
+              8/12
             </aside>
           </footer>
         </div>
@@ -1612,14 +1649,14 @@ aside {
       
       <!-- slide source: slides.md -->
       <div class="slide-wrapper">
-        <div class="slide slide-10">
+        <div class="slide slide-9">
           <div class="inner">
             
+            <header><h2>Asyncio</h2></header>
             
-            <section><p><strong>Asyncio</strong></p>
-<ul>
+            
+            <section><ul>
 <li>New library in Python3</li>
-<li>Exotic</li>
 <li>Asynchronous processing via co-operative multitasking</li>
 <li>Single thread</li>
 <li>Use exotic <em>async</em> and <em>await</em> keywords</li>
@@ -1641,7 +1678,42 @@ aside {
             </aside>
             
             <aside class="page_number">
-              10/13
+              9/12
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: slides.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-10">
+          <div class="inner">
+            
+            <header><h2>Compute Parallel Problems</h2></header>
+            
+            
+            <section><ul>
+<li>Perform multiple tasks on the same data set in parallel (Pipelines)</li>
+<li>Example - Multimedia processing. Processing a set of videos to reduce their size (encoding), plus extracting meta-data (for indexing).</li>
+<li>Example - Machine Learning on massive data sets. Same dataset is worked upon multiple ML algorithms in parallel.</li>
+</ul>
+<p>We won't be focussing on compute parallel problems.</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="slides.md">slides.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              10/12
             </aside>
           </footer>
         </div>
@@ -1652,14 +1724,20 @@ aside {
         <div class="slide slide-11">
           <div class="inner">
             
+            <header><h2>Data Parallel Problems</h2></header>
             
-            <section><p><strong>Async Libraries</strong></p>
-<ul>
-<li>Twisted - Reactor pattern, uses deferreds with callback chains.
-** Deferreds are like futures.</li>
-<li>Gevent &amp; Eventlet - Asynchronous processing libraries.
-<strong> Slightly old story now a days, still interesting to give a try.
-</strong> Uses greenlets - microthreads which use a kind of cooperative multitasking.</li>
+            
+            <section><ul>
+<li>Set of problems where each element of the input data can be processed independently of others</li>
+<li>Ideal for parallel processing because each core can work on different data elements in parallel.</li>
+<li>Final output is often a combination of the individual processed output.</li>
+<li>Example Problems<ul>
+<li><strong>Matrix Multiplication</strong> - Each row of the matrix can be processed in parallel and combined to generate final matrix.</li>
+<li><strong>Fractal Image Generation</strong> - Each row of the image can be generated parallely to generate final image.</li>
+<li><strong>Puzzle Solvers</strong> - Multiple solvers can be run in parallel to generate single solution or a batch of solutions. E.g: Sudoku Solver, Maze Solver etc.</li>
+<li><strong>I/O Tasks</strong> - Almost all tasks involing input/output on file system or network can be run in parallel. E.g: Web Crawler,</li>
+</ul>
+</li>
 </ul></section>
             
           </div>
@@ -1676,7 +1754,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              11/13
+              11/12
             </aside>
           </footer>
         </div>
@@ -1688,7 +1766,7 @@ aside {
           <div class="inner">
             
             
-            <section><p><strong>Examples</strong></p></section>
+            <section><p>LET'S GO!</p></section>
             
           </div>
           <div class="presenter_notes">
@@ -1704,36 +1782,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              12/13
-            </aside>
-          </footer>
-        </div>
-      </div>
-      
-      <!-- slide source: slides.md -->
-      <div class="slide-wrapper">
-        <div class="slide slide-13">
-          <div class="inner">
-            
-            
-            <section><pre><code>&gt;&gt;&gt; import antigravity
-</code></pre></section>
-            
-          </div>
-          <div class="presenter_notes">
-            <header><h1>Presenter Notes</h1></header>
-            <section>
-            
-            </section>
-          </div>
-          <footer>
-            
-            <aside class="source">
-              Source: <a href="slides.md">slides.md</a>
-            </aside>
-            
-            <aside class="page_number">
-              13/13
+              12/12
             </aside>
           </footer>
         </div>
@@ -1748,80 +1797,66 @@ aside {
       <caption>Table of Contents</caption>
       
       <tr id="toc-row-1">
-        <th><a href="#slide1">-</a></th>
+        <th><a href="#slide1">Concurrency in Python 3.0</a></th>
         <td><a href="#slide1">1</a></td>
       </tr>
       
-      
-      <tr id="toc-row-2">
-        <th><a href="#slide2">-</a></th>
-        <td><a href="#slide2">2</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-3">
-        <th><a href="#slide3">-</a></th>
-        <td><a href="#slide3">3</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-4">
-        <th><a href="#slide4">-</a></th>
-        <td><a href="#slide4">4</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-5">
-        <th><a href="#slide5">-</a></th>
-        <td><a href="#slide5">5</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-6">
-        <th><a href="#slide6">-</a></th>
-        <td><a href="#slide6">6</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-7">
-        <th><a href="#slide7">-</a></th>
-        <td><a href="#slide7">7</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-8">
-        <th><a href="#slide8">-</a></th>
-        <td><a href="#slide8">8</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-9">
-        <th><a href="#slide9">-</a></th>
-        <td><a href="#slide9">9</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-10">
-        <th><a href="#slide10">-</a></th>
-        <td><a href="#slide10">10</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-11">
-        <th><a href="#slide11">-</a></th>
-        <td><a href="#slide11">11</a></td>
-      </tr>
+        
+        <tr id="toc-row-2" class="sub">
+          <th><a href="#slide2">Concurrency</a></th>
+          <td><a href="#slide2">2</a></td>
+        </tr>
+        
+        <tr id="toc-row-3" class="sub">
+          <th><a href="#slide3">Parallelism</a></th>
+          <td><a href="#slide3">3</a></td>
+        </tr>
+        
+        <tr id="toc-row-4" class="sub">
+          <th><a href="#slide4">Types of Multitasking</a></th>
+          <td><a href="#slide4">4</a></td>
+        </tr>
+        
+        <tr id="toc-row-5" class="sub">
+          <th><a href="#slide5">Python &amp; Concurrency</a></th>
+          <td><a href="#slide5">5</a></td>
+        </tr>
+        
+        <tr id="toc-row-6" class="sub">
+          <th><a href="#slide6">Threads</a></th>
+          <td><a href="#slide6">6</a></td>
+        </tr>
+        
+        <tr id="toc-row-7" class="sub">
+          <th><a href="#slide7">Processes</a></th>
+          <td><a href="#slide7">7</a></td>
+        </tr>
+        
+        <tr id="toc-row-8" class="sub">
+          <th><a href="#slide8">Concurrent Futures</a></th>
+          <td><a href="#slide8">8</a></td>
+        </tr>
+        
+        <tr id="toc-row-9" class="sub">
+          <th><a href="#slide9">Asyncio</a></th>
+          <td><a href="#slide9">9</a></td>
+        </tr>
+        
+        <tr id="toc-row-10" class="sub">
+          <th><a href="#slide10">Compute Parallel Problems</a></th>
+          <td><a href="#slide10">10</a></td>
+        </tr>
+        
+        <tr id="toc-row-11" class="sub">
+          <th><a href="#slide11">Data Parallel Problems</a></th>
+          <td><a href="#slide11">11</a></td>
+        </tr>
+        
       
       
       <tr id="toc-row-12">
         <th><a href="#slide12">-</a></th>
         <td><a href="#slide12">12</a></td>
-      </tr>
-      
-      
-      <tr id="toc-row-13">
-        <th><a href="#slide13">-</a></th>
-        <td><a href="#slide13">13</a></td>
       </tr>
       
       
