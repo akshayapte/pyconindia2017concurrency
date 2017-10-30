@@ -33,12 +33,16 @@ class MazeGame(object):
         if not maze:
             return None
         
-        print(maze)
         self.getStartEndPoints(maze)
+        maze.save()
+        
+        # maze.setItem(self._start[0], self._start[1], 'S')
+        # maze.setItem(self._end[0], self._end[1], 'F')
+        
+        print(maze)
         
         # Dump it to maze.txt
         # open('maze.txt','w').write(str(maze))
-        maze.save()
         open ('maze_pts.txt','w').write(str(self._start) + ' ' + str(self._end) + '\n')
 
         if concurrent:
