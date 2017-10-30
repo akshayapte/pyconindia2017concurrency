@@ -100,7 +100,7 @@ class FastMatrixOps(object):
 
         mul_partial = partial(calc_row2, m1=m1, m2=m2_t)
 
-        pool = multiprocessing.Pool(4)
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
         # Parallelize each row multiplication
         data = pool.map(mul_partial, range(m1.m))
         # print data
