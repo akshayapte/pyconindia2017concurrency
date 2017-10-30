@@ -36,14 +36,14 @@ class PrimeChecker(threading.Thread):
         self.flag = False           
             
 if __name__ == "__main__":
-    numbers = [1297337, 1116281, 104395303, 472882027, 533000389, 817504243, 982451653, 112272535095293, 115280095190773, 1099726899285419]*100
+    numbers = [1297337, 1116281, 104395303, 472882027, 533000389, 817504243, 982451653, 112272535095293, 115280095190773, 1099726899285419]*10
     q = Queue(1000)
 
     for n in numbers:
         q.put(n)
         
     threads = []
-    for i in range(10):
+    for i in range(4):
         t = PrimeChecker(q)
         threads.append(t)
         t.start()
