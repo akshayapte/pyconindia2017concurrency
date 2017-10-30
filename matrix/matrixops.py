@@ -4,12 +4,13 @@ Fast operations on a matrix class
 
 """
 
-import multiprocessing
+import multiprocessing.dummy
 from matrix import Matrix, MatrixFactory
 from functools import partial
 
-#logger = multiprocessing.log_to_stderr()
-#logger.setLevel(multiprocessing.SUBDEBUG)
+# Debugging
+# logger = multiprocessing.log_to_stderr()
+# logger.setLevel(multiprocessing.SUBDEBUG)
 
 def calc_row(r, m1, m2):
     """ Calculate a row 'r' of the multiplication output of matrices m1 and m2 """
@@ -27,7 +28,11 @@ def calc_row2(r, m1, m2):
     d = []
     print('Calculating for',r)
     for y in range(m2.m):
+        # d.append(sum(item[0]*item[2] for item in zip(m1.rows[r], m2[y])))
+        # import pdb;pdb.set_trace()
         d.append(sum(item[0]*item[1] for item in zip(m1.rows[r], m2[y])))
+        # import forkedpdb;forkedpdb.ForkedPdb().set_trace()
+        # import forkedpdb;forkedpdb.ForkablePdb().set_trace()      
 
     return d
 
@@ -102,6 +107,7 @@ class FastMatrixOps(object):
 
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         # Parallelize each row multiplication
+        # data = pool.map(mul_partial, m1.m)      
         data = pool.map(mul_partial, range(m1.m))
         # print data
 
