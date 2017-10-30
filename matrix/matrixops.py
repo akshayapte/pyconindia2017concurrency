@@ -4,7 +4,7 @@ Fast operations on a matrix class
 
 """
 
-import multiprocessing.dummy
+import multiprocessing
 from matrix import Matrix, MatrixFactory
 from functools import partial
 
